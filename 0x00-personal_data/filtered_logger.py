@@ -49,7 +49,7 @@ def get_logger() -> logging.Logger:
     user_data.addHandler(StreamHandler)
     return user_data
 
-def get_connetor() -> mysql.connector.connection.MySQLConnection:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """ Connect to a secure database """
     db_name = os.environ.get('PERSONAL_DATA_DB_NAME')
     user = os.environ.get('PERSONAL_DATA_DB_USERNAME')

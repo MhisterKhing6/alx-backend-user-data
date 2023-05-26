@@ -11,7 +11,7 @@ import os
 PID_FIELDS = ("name", "ssn", "phone", "ip", "email")
 
 
-def filter_datum(fields : List, redaction : str, message : str, seperator : str) -> str:
+def filter_datum(fields : List[str], redaction : str, message : str, seperator : str) -> str:
     """ Obsecure specific fields in message"""
     for field in fields:
         message = re.sub(r'(?<={}=).+?(?={})'.format(field, seperator), redaction, message)

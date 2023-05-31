@@ -33,6 +33,6 @@ def erro():
 
 
 @app_views.route('/forbidden', strict_slashes=False)
-def erro():
+def error4():
     """ forbidden handler"""
     abort(403)

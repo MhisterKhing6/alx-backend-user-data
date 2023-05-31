@@ -33,7 +33,11 @@ class Auth:
         Check if the header is authorized
         and returns headers
         """
-        return None
+        if request:
+            auth = request.headers.get('Authorization')
+            return auth
+        else:
+            return None
 
     def current_user(self, request=None) -> TypeVar('User'):
         """

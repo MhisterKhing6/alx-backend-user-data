@@ -30,3 +30,9 @@ def stats() -> str:
 def erro():
     """ Unatourized handler"""
     abort(401)
+
+
+@app_views.route('/forbidden', strict_slashes=False)
+def erro():
+    """ forbidden handler"""
+    abort(403)

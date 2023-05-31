@@ -20,15 +20,15 @@ class Auth:
         return False
 
     def authorization_header(self, request=None) -> str:
-        """ 
+        """
         Check if the header is authorized
         and returns headers
         """
         return None
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """ 
-        current user 
+        """
+        current user
         the user
         """
         return None

@@ -17,7 +17,16 @@ class Auth:
         Check the require paths
         return headers
         """
-        return False
+        if path:
+            if excluded_paths:
+                if path in excluded_paths or (path + "/") in excluded_paths:
+                    return False
+                else:
+                    return True
+            else:
+                return True
+        else:
+            return True
 
     def authorization_header(self, request=None) -> str:
         """
@@ -28,7 +37,7 @@ class Auth:
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
-        current user
+        current user 
         the user
         """
         return None

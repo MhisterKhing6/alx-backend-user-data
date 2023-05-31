@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+"""
+Creates the auth class
+"""
 from flask import request
 from typing import List, TypeVar
-"""Creates the auth class """
 
 
 class Auth:

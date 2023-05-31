@@ -37,7 +37,7 @@ class Auth:
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
-        current user 
+        current user
         the user
         """
         return None

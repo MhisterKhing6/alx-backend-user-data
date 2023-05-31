@@ -12,12 +12,12 @@ class Auth:
         """
         Check the require paths
         """
-        pass
+        return False
 
     def authorization_header(self, request=None) -> str:
         """ Check if the header is authorized"""
-        pass
+        return None
 
     def current_user(self, request=None) -> TypeVar('User'):
         """ current user """
-        pass
+        return None

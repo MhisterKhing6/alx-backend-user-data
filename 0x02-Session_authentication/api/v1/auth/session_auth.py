@@ -6,6 +6,7 @@ from typing import TypeVar
 from models.user import User
 from flask import request
 import uuid
+import os
 
 
 class SessionAuth(Auth):
@@ -26,3 +27,9 @@ class SessionAuth(Auth):
         if session_id and type(session_id) is str:
             return self.user_id_by_session_id.get(session_id)
         return None
+
+    def session_cookie(self, request=None):
+        """ Set a session cookie """
+        if request:
+            key = os.environ.get('SESSION_NAME')
+            return request.cookie.get(key)

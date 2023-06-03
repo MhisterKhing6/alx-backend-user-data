@@ -60,3 +60,12 @@ class Auth:
         if request:
             key = os.environ.get('SESSION_NAME')
             return request.cookies.get(key)
+
+    def create_session(self, user_id: str = None) -> str:
+        """ Create a session """
+        if user_id is None or type(user_id) is not str:
+            return None
+        else:
+            sess_id = str(uuid.uuid4())
+            self.user_id_by_session_id[sess_id] = user_id
+            return sess_id

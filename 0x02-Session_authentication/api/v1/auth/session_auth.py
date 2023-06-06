@@ -48,6 +48,7 @@ class SessionAuth(Auth):
         "/auth_session/login", methods=["POST"], strict_slashes=False
         )
     def sess_login():
+        """ This doucemthe the app """
         from api.v1.auth.auth import Auth
         """ View for session login """
         email = request.form.get('email')

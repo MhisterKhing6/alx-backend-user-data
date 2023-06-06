@@ -9,7 +9,6 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base
 from user import User
-from typing import Dict
 
 
 class DB:
@@ -42,6 +41,6 @@ class DB:
         self._session.commit()
         return user1
 
-    def find_user_by(self, **kwargs: Dict) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """ Find user base on datainputed """
         return self._session.query(User).filter_by(**kwargs).one()

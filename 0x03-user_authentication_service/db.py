@@ -45,7 +45,7 @@ class DB:
         """ Find user base on datainputed """
         return self._session.query(User).filter_by(**kwargs).one()
 
-    def update_user(self, Id, **kwargs) -> User:
+    def update_user(self, Id: str, **kwargs: dict) -> User:
         """ Update user """
         try:
             user = self.find_user_by(id=Id)
@@ -57,3 +57,6 @@ class DB:
             return None
         except Exception:
             return None
+
+
+        

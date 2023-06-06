@@ -3,6 +3,7 @@
 import bcrypt
 from db import DB
 from user import User
+import uuid
 
 
 class Auth:
@@ -30,6 +31,11 @@ class Auth:
                     user.hashed_password) else False
         else:
             return False
+
+
+    def _generate_uuid(self, email: str):
+        """ Generate a unique uuid """
+        return str(uuid.uuid4())
 
 
 def _hash_password(password: str) -> bytes:

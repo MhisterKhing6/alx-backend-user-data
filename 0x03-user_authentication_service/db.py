@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, update
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -44,3 +44,16 @@ class DB:
     def find_user_by(self, **kwargs) -> User:
         """ Find user base on datainputed """
         return self._session.query(User).filter_by(**kwargs).one()
+
+    def update_user(self, Id, **kwargs) -> User:
+        """ Update user """
+        try:
+            user = self.find_user_by(id=Id)
+            for key, value in kwargs.items():
+                if key not in User.__dict__:
+                    raise ValueError
+                else:
+                    setattr(user, key, value)
+            return None
+        except Exception:
+            return None

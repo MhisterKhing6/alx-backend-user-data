@@ -43,7 +43,7 @@ class DB:
 
     def find_user_by(self, **kwargs) -> User:
         """ Find user base on datainputed """
-        return self._session.query(User).filter_by(**kwargs).one()
+        return self._session.query(User).filter_by(**kwargs).first()
 
     def check_for_user(self, email):
         """ Check if user exists """

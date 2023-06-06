@@ -16,7 +16,7 @@ class Auth:
         """ Register a user in a database """
         val1 = self._db._session.query(User).where(
             User.email == email
-            ).first()
+            ).one()
         if val1 is None:
             hase = _hash_password(password)
             return self._db.add_user(email, hase)

@@ -45,6 +45,11 @@ class DB:
         """ Find user base on datainputed """
         return self._session.query(User).filter_by(**kwargs).one()
 
+    def check_for_user(self, email):
+        """ Check if user exists """
+        user = self._session.query(User).filter(User.email == email).first()
+        return True if user else False
+
     def update_user(self, Id: str, **kwargs: dict) -> User:
         """ Update user """
         try:
@@ -57,6 +62,3 @@ class DB:
             return None
         except Exception:
             return None
-
-
-        

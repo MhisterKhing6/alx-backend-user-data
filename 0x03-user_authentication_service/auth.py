@@ -14,10 +14,8 @@ class Auth:
 
     def register_user(self, email: str, password: str) -> User:
         """ Register a user in a database """
-        val1 = self._db._session.query(User).where(
-            User.email == email
-            ).first()
-        if val1 is None:
+        val1 = self._db.check_for_user(email)
+        if not val1:
             hase = _hash_password(password)
             return self._db.add_user(email, hase)
         else:

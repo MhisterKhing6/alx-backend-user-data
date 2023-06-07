@@ -33,11 +33,11 @@ class Auth:
             return False
 
 
-    def _generate_uuid(self, email: str) -> str:
-        """ Generate a unique uuid """
-        return str(uuid.UUID())
-
-
 def _hash_password(password: str) -> bytes:
     """encrypt password using bcrypt """
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+
+
+def _generate_uuid(self, email: str) -> str:
+        """ Generate a unique uuid """
+        return str(uuid.UUID())

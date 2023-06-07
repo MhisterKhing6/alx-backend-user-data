@@ -40,4 +40,4 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid(self, email: str) -> str:
         """ Generate a unique uuid """
-        return str(uuid.UUID())
+        return str(uuid.uuid4())

@@ -32,12 +32,18 @@ class Auth:
         else:
             return False
 
+    def create_session(self, email: str) -> str:
+        """ create a session """
+        user = self._db.find_user_by(email=email)
+        user.session_id = _generate_uuid(self, email)
+        return user.session_id
+
 
 def _hash_password(password: str) -> bytes:
     """encrypt password using bcrypt """
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
 
-def _generate_uuid(self, email: str) -> str:
-        """ Generate a unique uuid """
-        return uuid.uuid4()
+def _generate_uuid(self) -> str:
+    """ Generate a unique uuid """
+    return str(uuid.uuid4())

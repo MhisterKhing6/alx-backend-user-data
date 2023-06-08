@@ -31,6 +31,20 @@ class Auth:
                     user.hashed_password) else False
         else:
             return False
+    
+    def get_reset_password_token(self, email: str) -> str:
+        user = self._db.find_user_by(email=email)
+        if user:
+            token = _generate_uuid()
+            user.reset_password_token = token
+            return token
+        else:
+            raise ValueError()
+
+    def get_user_from_session_id(self, session_id):
+        """ Get user by session id """
+        user = self._db.find_user_by(session_id=session_id)
+        return user
 
     def create_session(self, email: str) -> str:
         """ create a session """
@@ -40,6 +54,20 @@ class Auth:
             return user.session_id
         else:
             return None
+    
+    def update_password(self, reset_token: str, password: str) -> str:
+        """ update password """
+        user = self._db.find_user_by(reset_token=reset_token)
+        if user:
+            user.password = _hash_password(password)
+            user.reset_token = None
+        else:
+            raise ValueError("")
+
+
+    def destroy_session(self, user_id):
+        user = self._db.find_user_by(id=user_id)
+        user.session_id = None
 
 
 def _hash_password(password: str) -> bytes:

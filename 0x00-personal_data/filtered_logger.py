@@ -1,44 +1,40 @@
 #!/usr/bin/env python3
-""" 
-Logging in python obsecuring specific user data input
 """
-import logging
-import re
-from mysql import connector
-from typing import List, Any
-import os
+Script for handling Personal Data
+"""
 
-PID_FIELDS = ("name", "ssn", "phone", "ip", "email")
+from typing import List
+import re
+import logging
+from os import environ
+import mysql.connector
+
+
+# # PII fields to be redacted
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
-    """ Obsecure specific fields in message"""
-    for field in fields:
-        message = re.sub(r'(?<={}=).+?(?={})'.format(
-            field, seperator),
-         redaction, message)
+    """
+    Replaces sensitive information in a message with a redacted value
+    based on the list of fields to redact
+
+    Args:
+        fields: list of fields to redact
+        redaction: the value to use for redaction
+        message: the string message to filter
+        separator: the separator to use between fields
+
+    Returns:
+        The filtered string message with redacted values
+    """
+    for f in fields:
+        message = re.sub(f'{f}=.*?{separator}',
+                         f'{f}={redaction}{separator}', message)
     return message
 
-class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
-        """
-    REDACTION = "***"
-    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = ";"
 
-    def __init__(self, fields = []):
-        super(RedactingFormatter, self).__init__(self.FORMAT)
-        self.fields = fields
-
-
-
-    def format(self, record: logging.LogRecord) -> str:
-        """Return a formatted string """
-        return filter_datum(
-            self.fields, self.REDACTION, record.getMessage(), 
-            self.SEPARATOR)
-        
 def get_logger() -> logging.Logger:
     """
     Returns a Logger object for handling Personal Data
@@ -78,19 +74,54 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     return cnx
 
 
+def main():
+    """
+    Main function to retrieve user data from database and log to console
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    field_names = [i[0] for i in cursor.description]
 
-def main() -> None:
-    """ main code that obsecure certain fields"""
-    form = '[Holberton] %(name)s %(levelname)s %(asctime)s: %(message)s'
-    hanler = get_logger()
-    db = get_connetor().cursor()
-    query =('SELECT * from users')
-    result = db.execute(query)
+    logger = get_logger()
 
-    for (name, email, phone, ssn, ip,last_login, user_agent) in result:
-        message = 'name={}; email={}; phone={}; \
-         ssn={}; password={}; ip={}; last_login={}; user_agent={};'.format(
-            name, email, phone, ssn, ip, last_login, user_agent
-         )
-        log_record = logging.LogRecord("user_data", logging.INFO, None, None, message, None, None)
-        RedactingFormatter(['email', 'phone', 'password', 'ssn', 'name']).format(log_record)
+    for row in cursor:
+        str_row = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, field_names))
+        logger.info(str_row.strip())
+
+    cursor.close()
+    db.close()
+
+
+class RedactingFormatter(logging.Formatter):
+    """
+    Redacting Formatter class for filtering PII fields
+    """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]):
+        """
+        Constructor method for RedactingFormatter class
+
+        Args:
+            fields: list of fields to redact in log messages
+        """
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """
+        Formats the specified log record as text.
+
+        Filters values in incoming log records using filter_datum.
+        """
+        record.msg = filter_datum(self.fields, self.REDACTION,
+                                  record.getMessage(), self.SEPARATOR)
+        return super(RedactingFormatter, self).format(record)
+
+
+if __name__ == '__main__':
+    main()
